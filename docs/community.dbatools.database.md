@@ -46,7 +46,7 @@ This playbook will create the database AssetDatabase from the instance MSSQL.
 
 ```yaml
 ---
-  - name: Playbook to create database
+  - name: Playbook to remove database
     hosts: localhost
     connection: local
     gather_facts: no
