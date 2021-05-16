@@ -1,0 +1,6 @@
+---
+  - name: sample name
+    hosts: all
+    sample_module:
+      same_parameter: sample parameter 
+      sample_parameter2: sample parameter
