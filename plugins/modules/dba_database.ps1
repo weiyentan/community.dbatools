@@ -221,7 +221,7 @@ Function Get-AnsibleParam($obj, $name, $default = $null, $resultobj = @{ }, $fai
 		}
 	}
 	
-	return $value
+	Write-Output $value
 }
 
 #Alias Get-attr-->Get-AnsibleParam for backwards compat. Only add when needed to ease debugging of scripts
@@ -281,6 +281,127 @@ If (!(Get-Alias -Name "Get-attr" -ErrorAction SilentlyContinue))
 {
 	New-Alias -Name Get-attr -Value Get-AnsibleParam
 }
+#endregion
 
 
- 
+# region main functions
+$ErrorActionPreference = 'Stop'
+
+$params = Parse-Args -arguments $args -supports_check_mode $true
+$check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool" -default $false
+$diff_mode = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -default $false
+
+# these are your module parameters, there are various types which can be
+# used to format your parameters. You can also set mandatory parameters
+# with -failifempty, set defaults with -default and set choices with
+# -validateset.
+$database = Get-AnsibleParam -obj $params -name "database" -type "str" -failifempty $true
+$sqlinstance = Get-AnsibleParam -obj $params -name "sqlinstance" -type "str" -failifempty $true
+$dbausername = Get-AnsibleParam -obj $params -name "dbausername" -type "str" -failifempty $true
+$dbapassword = Get-AnsibleParam -obj $params -name "dbapassword" -type "str" -failifempty $true
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "absent", "present"
+
+$result = @{
+	changed   = $false
+	message = ''
+}
+#region test import dbatools module
+try
+{
+	Import-Module dbatools -ErrorAction stop
+	
+}
+catch
+{
+	Fail-Json -obj $result -message "The module dbatools is not present in the environment. Please install before running this task."
+}
+## Region generate credential  so that this becomes the base for connecting to the SQL Instance.
+[string]$credusername = $dbausername
+[string]$credpassword = $dbapassword
+[securestring]$secStringPassword = ConvertTo-SecureString $credpassword -AsPlainText -Force
+[pscredential]$dbacredObject = New-Object System.Management.Automation.PSCredential ($dbausername, $secStringPassword)
+##endregion 
+
+#region  attempt to connect to sqlinstance
+try
+{
+	Connect-DbaInstance -SqlInstance $sqlinstance -SqlCredential $dbacredObject 
+}
+catch
+{
+	Fail-Json -obj $result -message "There was a failure connecting to the sqlserver instance. The error message was ($_.exception)"
+}
+
+#endregion
+
+
+$collection = @() #build a data collection for structureddata
+$badcollection = @()
+if ($diff_mode)
+{
+	$result.diff = @{ }
+}
+$testdatabasepresent = Get-DbaDatabase -SqlInstance $sqlinstance -SqlCredential $dbacredObject -Database $database
+
+if ($testdatabasepresent)
+{
+	$databasepresent = $true
+}
+else
+{
+	$databasepresent = $false
+}
+
+if ($state -eq 'present')
+{
+	if (!$databasepresent)
+	{
+		if (-not ($checkmode))
+		{
+			#this allows  for dry runs
+			try
+			{
+				New-DbaDatabase -Name $database -SqlInstance $sqlinstance -erroraction Stop
+				$result.changed = $true
+				$message = ''
+				
+			}
+			catch
+			{
+				Fail-Json -obj $result -message 'Error was this PLACEHOLDER'
+			}
+			
+		}
+	}else{
+		$message = "The database $database is already present on the SQL Instance $sqlinstance  "
+	}
+}
+
+if ($state -eq 'absent')
+{
+	if ($databasepresent)
+	{
+		if (-not ($checkmode))
+		{
+			#this allows  for dry runs
+			try
+			{
+				Remove-DbaDatabase -database $database -SqlInstance $sqlinstance 
+				$result.changed = $true
+				$message = ''
+				
+			}
+			catch
+			{
+				Fail-Json -obj $result -message 'Error was this PLACEHOLDER'
+			}
+			
+		}
+	}
+}
+Exit-Json $result
+
+
+# Reference
+# https://docs.ansible.com/ansible/2.6/dev_guide/developing_modules_general_windows.html
+# https://docs.ansible.com/ansible/2.4/dev_guide/developing_modules_general_windows.html

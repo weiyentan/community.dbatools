@@ -17,7 +17,7 @@ Manages SQL Server databases using dbatools as a backend.
 |Parameters|Default| Choices|Required|Description|Example|
 |:---:|:---:|:--:|:---:|:---:|:---:|
 | `database`|""|""| Yes| The database that will be created/removed | Assets
-| `instance` |""| ""|Yes |The instance that you will be targetting against| SQLServer
+| `sqlinstance` |""| ""|Yes |The instance that you will be targetting against| SQLServer
 | `username` |""| "" | Yes | The username that you will be using to connect to the database| domain\johndoe , bob |
 |`password`|"" | ""| Yes| The password that you want to use to connect to the database | password
 | `type`   |standard | availability_group, standard| No |  The type of database to create | availailability_group
@@ -35,7 +35,7 @@ Manages SQL Server databases using dbatools as a backend.
       - name: create database AssetDatabase
         community.dbatools.database:
           database: AssetDatabase
-          instance: MSSQL
+          sqlinstance: MSSQL
           username: "{{ dbatools_username }}"
           password: "{{ dbatools_password }}"
           type: availability_group
@@ -54,7 +54,7 @@ This playbook will create the database AssetDatabase from the instance MSSQL.
       - name: remove database AssetDataase
         community.dbatools.database:
           database: AssetDatabase
-          instance: MSSQL
+          sqlinstance: MSSQL
           username: "{{ dbatools_username }}"
           password: "{{ dbatools_password }}"
           state: absent
