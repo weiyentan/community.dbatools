@@ -25,7 +25,6 @@ Manages SQL Server databases using dbatools as a backend.
 
 ## Examples
 
-
 ```yaml
 ---
   - name: Playbook to create database
@@ -33,7 +32,7 @@ Manages SQL Server databases using dbatools as a backend.
     connection: local
     gather_facts: no
     tasks:
-      - name: create database 
+      - name: create database AssetDatabase
         community.dbatools.database:
           database: AssetDatabase
           instance: MSSQL
@@ -42,6 +41,7 @@ Manages SQL Server databases using dbatools as a backend.
           type: availability_group
           state: present
 ```
+
 This playbook will create the database AssetDatabase from the instance MSSQL.
 
 ```yaml
@@ -51,7 +51,7 @@ This playbook will create the database AssetDatabase from the instance MSSQL.
     connection: local
     gather_facts: no
     tasks:
-      - name: create database 
+      - name: remove database AssetDataase
         community.dbatools.database:
           database: AssetDatabase
           instance: MSSQL
@@ -59,4 +59,5 @@ This playbook will create the database AssetDatabase from the instance MSSQL.
           password: "{{ dbatools_password }}"
           state: absent
 ```
+
 This will remove the database AssetDatabase from the SQL Instance MSSQL.
