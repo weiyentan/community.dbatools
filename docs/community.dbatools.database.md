@@ -20,7 +20,6 @@ Manages SQL Server databases using dbatools as a backend.
 | `sqlinstance` |""| ""|Yes |The instance that you will be targetting against| SQLServer
 | `username` |""| "" | Yes | The username that you will be using to connect to the database| domain\johndoe , bob |
 |`password`|"" | ""| Yes| The password that you want to use to connect to the database | password
-| `type`   |standard | availability_group, standard| No |  The type of database to create | availailability_group
 | `state` | "" | absent , present | Yes | Whether to add or remove database | present
 
 ## Examples
@@ -38,7 +37,6 @@ Manages SQL Server databases using dbatools as a backend.
           sqlinstance: MSSQL
           username: "{{ dbatools_username }}"
           password: "{{ dbatools_password }}"
-          type: availability_group
           state: present
 ```
 
