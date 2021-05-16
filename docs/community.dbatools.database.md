@@ -8,7 +8,7 @@ Manages SQL Server databases using dbatools as a backend.
 * [Examples](#Example)
 
 ## Synopsis
-* Tasks to manage databases using [dbatools](https://github.com/sqlcollaborative/dbatools) module. This
+* Tasks to manage databases using [dbatools](https://github.com/sqlcollaborative/dbatools) module. The tasks involved will be adding/removing standard or availability group databases.
 
 ## Requirements 
 * PowerShell module [dbatools](https://github.com/sqlcollaborative/dbatools) needs to be installed on the Ansible host/execution environment.
