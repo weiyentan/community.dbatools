@@ -295,11 +295,27 @@ $diff_mode = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -d
 # used to format your parameters. You can also set mandatory parameters
 # with -failifempty, set defaults with -default and set choices with
 # -validateset.
-$database = Get-AnsibleParam -obj $params -name "database" -type "str" -failifempty $true
+$name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $true
 $sqlinstance = Get-AnsibleParam -obj $params -name "sqlinstance" -type "str" -failifempty $true
 $dbausername = Get-AnsibleParam -obj $params -name "dbausername" -type "str" -failifempty $true
 $dbapassword = Get-AnsibleParam -obj $params -name "dbapassword" -type "str" -failifempty $true
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "absent", "present"
+$collation = Get-AnsibleParam -obj $params -name "collation" -type "str"
+$recoverymodel = Get-AnsibleParam -obj $params -name "recoverymodel" -type "str"
+$DataFilePath = Get-AnsibleParam -obj $params -name "datafilepath" -type "str"
+$LogFilePath = Get-AnsibleParam -obj $params -name "logfilepath" -type "str"
+$PrimaryFilesize = Get-AnsibleParam -obj $params -name "primaryfilesize" -type "int"
+$PrimaryFileGrowth = Get-AnsibleParam -obj $params -name "primaryfilegrowth" -type "int"
+$PrimaryFileMaxSize = Get-AnsibleParam -obj $params -name "primaryfilemaxsize" -type "int"
+$LogSize = Get-AnsibleParam -obj $params -name "logsize" -type "int"
+$LogGrowth = Get-AnsibleParam -obj $params -name "loggrowth" -type "int"
+$LogMaxSize = Get-AnsibleParam -obj $params -name "logmaxsize" -type "int"
+$SecondaryFilesize = Get-AnsibleParam -obj $params -name "secondaryfilesize" -type "int"
+$SecondaryFileGrowth = Get-AnsibleParam -obj $params -name "secondaryfilegrowth" -type "int"
+$SecondaryFileMaxSize = Get-AnsibleParam -obj $params -name "secondaryfilemaxsize" -type "int"
+$SecondaryFileMaxSize = Get-AnsibleParam -obj $params -name "secondaryfilemaxsize" -type "int"
+$SecondaryFileCount = Get-AnsibleParam -obj $params -name "secondaryfilecount" -type "int"
+$DefaultFileGroup = Get-AnsibleParam -obj $params -name "defaultfilegroup" -type "str" -ValidateSet "primary", "secondary"
 
 $result = @{
 	changed   = $false
@@ -354,20 +370,97 @@ else
 
 if ($state -eq 'present')
 {
+	
 	if (!$databasepresent)
 	{
+		#region creates a generic hash table that fills out the parameters from the yaml to new-dbadatabase cmdlet.
+		$dbaparams = @{
+			name	    = $name;
+			sqlinstance = $sqlinstance;
+			erroraction = 'stop'
+		}
+		
+		if ($collation)
+		{
+			$dbaparams.add('collation', $collation)
+		}
+		
+		if ($recoverymodel)
+		{
+			$dbaparams.add('recoverymodel', $recoverymodel)
+		}
+		
+		if ($DataFilePath)
+		{
+			$dbaparams.add('datafilepath', $DataFilePath)
+		}
+		
+		if ($LogFilePath)
+		{
+			$dbaparams.add('logfilepath', $LogFilePath)
+		}
+		
+		if ($PrimaryFilesize)
+		{
+			$dbaparams.add('primaryfilesize', $PrimaryFilesize)
+		}
+		
+		if ($PrimaryFileGrowth)
+		{
+			$dbaparams.Add('primaryfilegrowth', $PrimaryFileGrowth)
+		}
+		
+		if ($primaryFilemaxsize)
+		{
+			$dbaparams.add('primaryfilemaxsize', $PrimaryFileMaxSize)
+		}
+		
+		if ($logsize)
+		{
+			$dbaparams.add('logsize', $LogSize)
+		}
+		
+		if ($LogGrowth)
+		{
+			$dbaparams.add('loggrowth', $LogGrowth)
+		}
+		
+		if ($LogMaxSize)
+		{
+			$dbaparams.add('logmaxsize', $LogMaxSize)
+		}
+		
+		if ($SecondaryFilesize)
+		{
+			$dbaparams.add('secondaryfilesize', $SecondaryFilesize)
+		}
+		
+		if ($SecondaryFileGrowth)
+		{
+			$dbaparams.add('secondaryfilegrowth', $SecondaryFileGrowth)
+		}
+		
+		if ($SecondaryFileMaxSize)
+		{
+			$dbaparams.add('secondaryfilemaxsize', $SecondaryFileMaxSize)
+		}
+		$result.changed = $true #set to true here to accomodate for checkmode.
+		#endregion
 		if (-not ($checkmode))
 		{
+			
 			#this allows  for dry runs
+			
 			try
 			{
-				New-DbaDatabase -Name $database -SqlInstance $sqlinstance -erroraction Stop
-				$result.changed = $true
+				New-DbaDatabase
+			
 				$message = ''
 				
 			}
 			catch
 			{
+				$result.change = $false
 				Fail-Json -obj $result -message 'Error was this PLACEHOLDER'
 			}
 			
@@ -381,7 +474,7 @@ if ($state -eq 'absent')
 {
 	if ($databasepresent)
 	{
-		if (-not ($checkmode))
+		if (-not ($checkmode)) 
 		{
 			#this allows  for dry runs
 			try
