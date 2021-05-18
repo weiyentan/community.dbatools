@@ -1,0 +1,12 @@
+namespace: "community"
+name: "dbatools"
+version: "0.1"
+readme: "README.md"
+authors:
+    - "Wei-Yen Tan <weiyen.tan@gmail.com>
+dependencies:
+license:
+    - "MIT"
+tags:
+    - mssql
+repository: "https://github.com/weiyentan/ansible.dbatools.collection"
