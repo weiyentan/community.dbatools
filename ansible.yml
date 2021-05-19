@@ -1,10 +1,9 @@
 namespace: "community"
 name: "dbatools"
+description: "Collection to manage SQL Server using DBATools a PowerShell Module "
 version: "0.1"
 readme: "README.md"
-authors:
-    - "Wei-Yen Tan <weiyen.tan@gmail.com>"
-dependencies:
+authors: ["Wei-Yen Tan"]
 license:
     - "MIT"
 tags:
