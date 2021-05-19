@@ -1,5 +1,5 @@
 namespace: "community"
-name: "dbatools"
+name: "community_dbatools"
 description: "Collection to manage SQL Server using DBATools a PowerShell Module "
 version: "0.1"
 readme: "README.md"
@@ -8,4 +8,5 @@ license:
     - "MIT"
 tags:
     - mssql
+    - database
 repository: "https://github.com/weiyentan/ansible.dbatools.collection"
