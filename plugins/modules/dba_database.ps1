@@ -361,9 +361,9 @@ if ($diff_mode)
 {
 	$result.diff = @{ }
 }
-$testdatabasepresent = Get-DbaDatabase -SqlInstance $sqlinstance -SqlCredential $dbacredObject -Database $database
+$testdatabasepresent = Get-DbaDatabase -SqlInstance $sqlinstance -SqlCredential $dbacredObject -Database $name
 
-if ($testdatabasepresent)
+if ($testdatabasepresent -eq $true)
 {
 	$databasepresent = $true
 }
@@ -469,7 +469,7 @@ if ($state -eq 'present')
 			
 		}
 	}else{
-		$message = "The database $database is already present on the SQL Instance $sqlinstance  "
+		$result.message = "The database $database is already present on the SQL Instance $sqlinstance  "
 	}
 }
 
