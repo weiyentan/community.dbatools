@@ -470,7 +470,7 @@ if ($state -eq 'present')
 			
 		}
 	}else{
-		$result.message = "The database $database is already present on the SQL Instance $sqlinstance  "
+		$result.message = "The database $name is already present on the SQL Instance $sqlinstance  "
 	}
 }
 
