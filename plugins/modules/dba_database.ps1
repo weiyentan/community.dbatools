@@ -324,6 +324,7 @@ $result = @{
 	changed   = $false
 	message = ''
 }
+Exit-Json $result
 #region test import dbatools module
 try
 {
