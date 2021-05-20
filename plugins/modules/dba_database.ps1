@@ -217,7 +217,7 @@ Function Get-AnsibleParam($obj, $name, $default = $null, $resultobj = @{ }, $fai
 				Fail-Json -obj $resultobj -message "Get-AnsibleParam: Parameter '$name' is not a YAML list."
 			}
 			# , is not a typo, forces it to return as a list when it is empty or only has 1 entry
-			return, $value
+			write-output $value
 		}
 	}
 	
@@ -245,11 +245,11 @@ Function ConvertTo-Bool
 	
 	if (($obj -is [boolean] -and $obj) -or $boolean_strings -contains $obj_string.ToLower())
 	{
-		return $true
+		Write-Output $true
 	}
 	else
 	{
-		return $false
+		Write-Output $false
 	}
 }
 
@@ -281,7 +281,9 @@ If (!(Get-Alias -Name "Get-attr" -ErrorAction SilentlyContinue))
 {
 	New-Alias -Name Get-attr -Value Get-AnsibleParam
 }
-#endregion
+
+
+##endregion
 
 
 # region main functions
