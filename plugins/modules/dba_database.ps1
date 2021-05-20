@@ -363,7 +363,7 @@ if ($diff_mode)
 }
 $testdatabasepresent = Get-DbaDatabase -SqlInstance $sqlinstance -SqlCredential $dbacredObject -Database $name
 
-if ($testdatabasepresent -eq $true)
+if ($testdatabasepresent.name -eq $name)
 {
 	$databasepresent = $true
 }
