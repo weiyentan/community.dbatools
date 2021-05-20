@@ -341,11 +341,11 @@ catch
 [securestring]$secStringPassword = ConvertTo-SecureString $credpassword -AsPlainText -Force
 [pscredential]$dbacredObject = New-Object System.Management.Automation.PSCredential ($credusername, $secStringPassword)
 ##endregion 
-Exit-Json $result
+
 #region  attempt to connect to sqlinstance
 try
 {
-	Connect-DbaInstance -SqlInstance $sqlinstance -SqlCredential $dbacredObject 
+	Connect-DbaInstance -SqlInstance $sqlinstance -SqlCredential $dbacredObject |out-null
 }
 catch
 {
