@@ -375,7 +375,7 @@ else
 if ($state -eq 'present')
 {
 	
-	if (!$databasepresent)
+	if ($databasepresent -eq $false)
 	{
 		#region creates a generic hash table that fills out the parameters from the yaml to new-dbadatabase cmdlet.
 		$dbaparams = @{
