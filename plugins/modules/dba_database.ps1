@@ -456,15 +456,14 @@ if ($state -eq 'present')
 			
 			try
 			{
-				New-DbaDatabase
-			
-				$message = ''
+				New-DbaDatabase @dbaparams
+				$message = 'The database $name was created successfully on $sqlinstance'
 				
 			}
 			catch
 			{
 				$result.change = $false
-				Fail-Json -obj $result -message 'Error was this PLACEHOLDER'
+				Fail-Json -obj $result -message "Error was this $Error[0]"
 			}
 			
 		}
@@ -489,7 +488,7 @@ if ($state -eq 'absent')
 			}
 			catch
 			{
-				Fail-Json -obj $result -message 'Error was this PLACEHOLDER'
+				Fail-Json -obj $result -message "Error was this $Error[0]"
 			}
 			
 		}
