@@ -382,6 +382,7 @@ if ($state -eq 'present')
 			name	    = $name;
 			sqlinstance = $sqlinstance;
 			erroraction = 'stop'
+			sqlcredential = $dbacredObject
 		}
 		
 		if ($collation)
