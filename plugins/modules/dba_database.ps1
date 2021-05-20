@@ -300,8 +300,8 @@ $diff_mode = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -d
 # -validateset.
 $name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $true
 $sqlinstance = Get-AnsibleParam -obj $params -name "sqlinstance" -type "str" -failifempty $true
-$dbausername = Get-AnsibleParam -obj $params -name "dbausername" -type "str" -failifempty $true
-$dbapassword = Get-AnsibleParam -obj $params -name "dbapassword" -type "str" -failifempty $true
+$dbausername = Get-AnsibleParam -obj $params -name "username" -type "str" -failifempty $true
+$dbapassword = Get-AnsibleParam -obj $params -name "password" -type "str" -failifempty $true
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "absent", "present"
 $collation = Get-AnsibleParam -obj $params -name "collation" -type "str"
 $recoverymodel = Get-AnsibleParam -obj $params -name "recoverymodel" -type "str"
