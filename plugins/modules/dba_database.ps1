@@ -324,7 +324,7 @@ $result = @{
 	changed   = $false
 	message = ''
 }
-Exit-Json $result
+
 #region test import dbatools module
 try
 {
@@ -339,9 +339,9 @@ catch
 [string]$credusername = $dbausername
 [string]$credpassword = $dbapassword
 [securestring]$secStringPassword = ConvertTo-SecureString $credpassword -AsPlainText -Force
-[pscredential]$dbacredObject = New-Object System.Management.Automation.PSCredential ($dbausername, $secStringPassword)
+[pscredential]$dbacredObject = New-Object System.Management.Automation.PSCredential ($credusername, $secStringPassword)
 ##endregion 
-
+Exit-Json $result
 #region  attempt to connect to sqlinstance
 try
 {
