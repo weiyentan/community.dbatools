@@ -9,4 +9,4 @@ license:
 tags:
     - mssql
     - database
-repository: "https://github.com/weiyentan/ansible.dbatools.collection"
+repository: "https://github.com/weiyentan/community.dbatools"
