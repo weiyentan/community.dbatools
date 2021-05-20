@@ -341,7 +341,7 @@ catch
 [securestring]$secStringPassword = ConvertTo-SecureString $credpassword -AsPlainText -Force
 [pscredential]$dbacredObject = New-Object System.Management.Automation.PSCredential ($credusername, $secStringPassword)
 ##endregion 
-
+Exit-Json $result
 #region  attempt to connect to sqlinstance
 try
 {
@@ -354,7 +354,7 @@ catch
 
 #endregion
 
-Exit-Json $result
+
 $collection = @() #build a data collection for structureddata
 $badcollection = @()
 if ($diff_mode)
