@@ -457,7 +457,7 @@ if ($state -eq 'present')
 			try
 			{
 				New-DbaDatabase @dbaparams
-				$message = 'The database $name was created successfully on $sqlinstance'
+				$result.message = "The database $name was created successfully on $sqlinstance"
 				
 			}
 			catch
@@ -483,7 +483,7 @@ if ($state -eq 'absent')
 			{
 				Remove-DbaDatabase -database $database -SqlInstance $sqlinstance 
 				$result.changed = $true
-				$message = ''
+				$result.message = "Removed the Database $name from sql instance $sqlinstance "
 				
 			}
 			catch
