@@ -477,14 +477,16 @@ if ($state -eq 'present')
 if ($state -eq 'absent')
 {
 	if ($databasepresent)
-	{
+	{ 
+		$result.changed = $true
 		if (-not ($checkmode)) 
 		{
 			#this allows  for dry runs
 			try
 			{
-				Remove-DbaDatabase -database $name -SqlInstance $sqlinstance -SqlCredential $dbacredObject 
-				$result.changed = $true
+				
+				Get-DbaDatabase -database $name -sqlinstance $sqlinstance -SqlCredential $dbacredObject | Remove-DbaDatabase  -Confirm:$false -ErrorAction Stop
+				
 				$result.message = "Removed the Database $name from sql instance $sqlinstance "
 				
 			}
