@@ -18,7 +18,7 @@ Manages SQL Server databases using dbatools as a backend.
 |:---:|:---:|:--:|:---:|:---:|:---:|
 | `database`|""|""| Yes| The database that will be created/removed | Assets
 | `sqlinstance` |""| ""|Yes |The instance that you will be targetting against| SQLServer
-| `username` |""| "" | Yes | The username that you will be using to connect to the database| domain\johndoe , bob |
+| `username` |""| "" | Yes | The username that you will be using to connect to the database|  bob |
 |`password`|"" | ""| Yes| The password that you want to use to connect to the database | password
 |`state` | "" | absent , present | Yes | Whether to add or remove database | present
 |`collation`| "" |""| No | The database collation, if not supplied the default server collation will be used.| SQL_Latin_General_CP1_CI_AS
