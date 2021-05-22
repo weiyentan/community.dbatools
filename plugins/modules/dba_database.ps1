@@ -322,7 +322,7 @@ $DefaultFileGroup = Get-AnsibleParam -obj $params -name "defaultfilegroup" -type
 
 $result = @{
 	changed   = $false
-	message = ''
+	database = ''
 }
 
 #region test import dbatools module
@@ -384,7 +384,7 @@ if ($state -eq 'present')
 			erroraction = 'stop'
 			sqlcredential = $dbacredObject
 		}
-		
+	 
 		if ($collation)
 		{
 			$dbaparams.add('collation', $collation)
@@ -458,9 +458,9 @@ if ($state -eq 'present')
 			
 			try
 			{
-				New-DbaDatabase @dbaparams
-				$result.message = "The database $name was created successfully on $sqlinstance"
-				
+				$databaseobject = New-DbaDatabase @dbaparams
+                $newdatabaseobject = $databaseobject | Select-Object computername, instancename, sqlinstance, name, status, isaccessible, recoverymodel, logreusewaitstatus, sizemb, Compatibility, Collation, Owner, LastFullBackup, LastDiffBackup, LastLogBackup
+				$result.database += $newdatabaseobject
 			}
 			catch
 			{
