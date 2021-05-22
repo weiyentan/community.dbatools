@@ -16,7 +16,7 @@
           password: "{{ dba_password }}"
           state: "{{ state }}" 
           collation: "{{ collation | default(omit) }}"
-          recoverymodel: "{{ recoverymodel | default(omit)) }}"
+          recoverymodel: "{{ recoverymodel | default(omit) }}"
           primaryfilesize: "{{ primaryfilesize | default(omit) }}"
           primaryfilegrowth: "{{ primaryfilegrowth | default(omit) }}"
           logsize: "{{ logsize | default(omit) }}"
