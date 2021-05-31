@@ -10,3 +10,7 @@ Currently the collection will accomodate for the following use cases:
 * User / Login Management
 
 This is just for starters. 
+
+# TODO:
+* Add support for Kerberos. At this time, in order to connect to a SQL Instance the username must be a local user.  This is something that needs to be experimented against.
+

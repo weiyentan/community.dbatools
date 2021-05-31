@@ -1,0 +1,30 @@
+---
+  - name: Database management
+    hosts: localhost
+    gather_facts: no
+    connection: local
+    collections:
+      - community.dbatools
+    vars:
+      ansible_ssh_use_tty: False
+    tasks:
+      - name: Database Management
+        dba_database: 
+          name: "{{ database_name }}"
+          sqlinstance: "{{ sqlserver_instance }}"
+          username: "{{ dba_username }}"
+          password: "{{ dba_password }}"
+          state: "{{ state }}" 
+          collation: "{{ collation | default(omit) }}"
+          recoverymodel: "{{ recoverymodel | default(omit) }}"
+          primaryfilesize: "{{ primaryfilesize | default(omit) }}"
+          primaryfilegrowth: "{{ primaryfilegrowth | default(omit) }}"
+          logsize: "{{ logsize | default(omit) }}"
+          logmaxsize: "{{ logmaxsize | default(omit) }}"
+          secondaryfilesize: "{{ secondaryfilesize | default(omit) }}"
+          secondaryfilegrowth: "{{ secondaryfilegrowth | default(omit) }}"
+          secondaryfilemaxsize: "{{ secondaryfilemaxsize | default(omit) }}"
+          secondaryfilecount: "{{ secondaryfilecount | default(omit) }}"
+          defaultfilegroup: "{{ defaultfilegroup | default(omit) }}"
+        environment:
+          TERM: dumb
