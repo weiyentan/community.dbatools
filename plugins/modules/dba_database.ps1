@@ -143,6 +143,17 @@ if ($state -eq 'present') {
 		if ($SecondaryFileMaxSize) {
 			$dbaparams.add('secondaryfilemaxsize', $SecondaryFileMaxSize)
 		}
+		
+		if ($SecondaryFileCount)
+		{
+			$dbaparams.add('seconddaryfilecount', $SecondaryFileCount)
+		}
+		
+		if ($DefaultFileGroup)
+		{
+			$dbaparams.add('defaultfilegroup', $DefaultFileGroup)
+		}
+		
 		$result.changed = $true #set to true here to accomodate for checkmode.
 		#endregion
 		if (-not ($checkmode)) {
@@ -161,7 +172,57 @@ if ($state -eq 'present') {
 			
 		}
 	}
-	else {
+	else
+	{
+		#logfilepath check 
+		if ($LogFilePath -ne '' -and $testdatabasepresent.logfiles.filename -ne $LogFilePath)
+		{
+			$testdatabasepresent.logfiles.filename = $LogFilePath
+			#determine next step here. evaluate how to add to the result object.
+		}
+		
+		#collation check
+		if ($collation -ne '' -and $testdatabasepresent.collation -ne $collation)
+		{
+			$testdatabasepresent.collation = $collation
+		}
+		#Primaryfilegrowth check
+		$PrimaryFileGrowthkb = $PrimaryFileGrowth/1kb
+		if ($PrimaryFileGrowth -ne '' -and $testdatabasepresent.filegroups.files.growth -ne $PrimaryFileGrowthkb)
+		{
+			$testdatabasepresent.filegroups.files.growth = $PrimaryFileGrowthkb
+		}
+		
+		#Primaryfilemax check
+		$PrimaryFileMaxSizekb = $PrimaryFileMaxSize/1kb
+		if ($PrimaryFileMaxSize -ne '' -and $testdatabasepresent.filegroups.files.maxsize -ne $PrimaryFileMaxSizekb)
+		{
+			$testdatabasepresent.filegroups.files.maxsize = $PrimaryFileMaxSizekb
+		}
+		
+		$SecondaryFileMaxSizekb = $SecondaryFileMaxSize/1kb
+		$secondaryfilegroup = (($testdatabasepresent.filegroups) | Where-Object name -NotLike '*primary*')
+		
+		if ($SecondaryFileMaxSize -ne '' -and $secondaryfilegroup.count -gt 0)
+		{
+			foreach ($SecondaryFile in $secondaryfilegroup)
+			{
+				if ($SecondaryFile.file.maxsize -ne $SecondaryFileMaxSizekb)
+				{
+					$SecondaryFile.file.maxsize = $SecondaryFileMaxSizekb
+				}
+			}
+		}
+		
+		$Se
+		#logsize check
+		$LogSizekb = $LogSize/1kb
+		if ($LogSize -ne '' -and $testdatabasepresent.logfiles.size -ne $LogSize)
+		{
+			$testdatabasepresent.logsize = $LogSizekb
+		}
+		
+	
 		$result.message = "The database $name is already present on the SQL Instance $sqlinstance  "
 	}
 }
