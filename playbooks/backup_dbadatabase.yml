@@ -1,0 +1,20 @@
+---
+  - name: Database management
+    hosts: localhost
+    gather_facts: no
+    connection: local
+    collections:
+      - community.dbatools
+    vars:
+      ansible_ssh_use_tty: False
+    tasks:
+     - name: Backup Database
+       dba_database_backup:
+          name: "{{ database_name }}"
+          sqlinstance: "{{ sqlserver_instance }}"
+          username: "{{ dba_username }}"
+          password: "{{ dba_password }}"
+          path: "{{ path }}"
+       environment:
+          TERM: dumb
+
